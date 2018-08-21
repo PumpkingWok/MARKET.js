@@ -33,6 +33,7 @@ import { OrderTransactionInfo } from './lib/OrderTransactionInfo';
 import { MARKETProtocolArtifacts } from './MARKETProtocolArtifacts';
 import { OraclizeContractWrapper } from './contract_wrappers/OraclizeContractWrapper';
 import { OraclizeContractMetaData } from './types/ContractMetaData';
+import { ContractABIVerifier } from './utilities/ContractABIVerifier';
 
 /**
  * The `Market` class is the single entry-point into the MARKET.js library.
@@ -121,6 +122,47 @@ export class Market {
   // *****************************************************************
   // ****                     Public Methods                      ****
   // *****************************************************************
+
+  /**
+   * Instantiates Market class and verifies the ABI are in sync with the typechain generated classes
+   *  of market contract deployed to the addresses in config.
+   *
+   *
+   */
+  public static safeInit(provider: Provider, config: MARKETProtocolConfig): Market {
+    const market = new Market(provider, config);
+    const artifacts = new MARKETProtocolArtifacts(config.networkId);
+    const verifier = new ContractABIVerifier();
+
+    const verificationResult = verifier.verify([
+      {
+        artifact: artifacts.marketCollateralPoolFactoryArtifact,
+        contract: market.marketCollateralPoolFactory
+      },
+      {
+        artifact: artifacts.marketContractFactoryOraclizeArtifact,
+        contract: market.marketContractFactory
+      },
+      {
+        artifact: artifacts.marketContractRegistryArtifact,
+        contract: market.marketContractRegistry
+      },
+      {
+        artifact: artifacts.marketTokenArtifact,
+        contract: market.mktTokenContract
+      },
+      {
+        artifact: artifacts.orderLibArtifact,
+        contract: market.orderLib
+      }
+    ]);
+    const invalidResults = verificationResult.filter(result => !result.isValid);
+    if (invalidResults.length !== 0) {
+      throw new Error(`ABI Verification failed.\n${JSON.stringify(invalidResults)}`);
+    }
+
+    return market;
+  }
 
   // PROVIDER METHODS
   /**
