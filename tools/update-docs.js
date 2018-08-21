@@ -14,6 +14,9 @@ cd(tmpfile)
 exec("git init")
 exec(`git clone  https://github.com/MARKETProtocol/MARKET.js.git `);
 cd("MARKET.js")
+
+console.log(process.env.AWS_BUCKET, process.env.AWS_REGION);
+
 let uploadToAws = () => {
   var client = s3.createClient({
     maxAsyncS3: 20,     // this is the default
