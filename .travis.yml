@@ -23,7 +23,7 @@ script:
   - docker-compose exec marketjs env TRUFFLE_DEVELOP_HOST="$TRUFFLE_DEVELOP_HOST" npm run test:prod
 after_success:
   - docker-compose exec marketjs env TRAVIS=true TRAVIS_JOB_ID="$TRAVIS_JOB_ID" TRAVIS_BRANCH="$TRAVIS_BRANCH" TRAVIS_PULL_REQUEST="$TRAVIS_PULL_REQUEST" npm run report-coverage
-  - node tools/update-docs.js
+  - node tools/update-docs.js  $AWS_ACCESS_KEY $AWS_SECRET $AWS_REGION $AWS_BUCKET
 #  - docker-compose exec marketjs npm run deploy-docs
 #  - docker-compose exec marketjs npm run semantic-release
 deploy:
