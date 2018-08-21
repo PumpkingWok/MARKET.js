@@ -15,7 +15,7 @@ exec("git init")
 exec(`git clone  https://github.com/MARKETProtocol/MARKET.js.git `);
 cd("MARKET.js")
 
-console.log(process.env.AWS_BUCKET, process.env.AWS_REGION);
+console.log(process.env.AWS_BUCKET);
 
 let uploadToAws = () => {
   var client = s3.createClient({
@@ -28,7 +28,6 @@ let uploadToAws = () => {
       accessKeyId: process.env.AWS_ACCESS_KEY,
       secretAccessKey:process.env.AWS_SECRET,
       region: process.env.AWS_REGION,
-      signatureVersion: 'v3',
       // endpoint: 's3.yourdomain.com',
       // sslEnabled: false
       // any other options are passed to new AWS.S3()
