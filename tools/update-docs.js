@@ -1,7 +1,10 @@
+
+require('dotenv').config()
 const { cd, exec, echo, touch, mkdir,cp } = require("shelljs")
 const { readFileSync } = require("fs")
 const url = require("url")
 const s3 = require("s3")
+
 let tmpfile= process.env.DOC_TMP_DIR||'/tmp/docs-aws'
 require('dotenv').config()
 echo("Deploying docs!!!")
@@ -11,6 +14,9 @@ cd(tmpfile)
 exec("git init")
 exec(`git clone  https://github.com/MARKETProtocol/MARKET.js.git `);
 cd("MARKET.js")
+
+console.log(process.env.AWS_BUCKET, process.env.AWS_REGION);
+
 let uploadToAws = () => {
   var client = s3.createClient({
     maxAsyncS3: 20,     // this is the default
@@ -19,9 +25,9 @@ let uploadToAws = () => {
     multipartUploadThreshold: 20971520, // this is the default (20 MB)
     multipartUploadSize: 15728640, // this is the default (15 MB)
     s3Options: {
-      accessKeyId: process.argv[2],
-      secretAccessKey:process.argv[3],
-      region: process.argv[4],
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey:process.env.AWS_SECRET,
+      region: process.env.AWS_REGION,
       signatureVersion: 'v3',
       // endpoint: 's3.yourdomain.com',
       // sslEnabled: false
@@ -35,7 +41,7 @@ let uploadToAws = () => {
     deleteRemoved: true, // default false, whether to remove s3 objects
                          // that have no corresponding local file.
     s3Params: {
-      Bucket:process.argv[5],
+      Bucket:process.env.AWS_BUCKET,
       Prefix: "",
       // other options supported by putObject, except Body and ContentLength.
       // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property
@@ -65,10 +71,10 @@ exec('git tag', (code, stdout, stderr) => {
   })
 
 
-  cd(tmpfile)
+ cd(tmpfile)
 //  exec(`git clone --depth 1 https://github.com/MARKETProtocol/docs.git -b gh-pages` , (code, stdout, stderr) => {
-  //cp('-Rf',"docs/*",`alltags`)
-  uploadToAws()
+    //cp('-Rf',"docs/*",`alltags`)
+    uploadToAws()
   //});
 
 
