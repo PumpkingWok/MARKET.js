@@ -115,12 +115,15 @@
     "bignumber.js": "^7.2.1",
     "bintrees": "^1.0.2",
     "bn.js": "^4.11.8",
+    "dotenv": "^6.0.0",
     "ethereum-input-data-decoder": "0.0.12",
     "ethereumjs-abi": "^0.6.5",
     "ethereumjs-util": "^5.2.0",
     "jsonschema": "^1.2.4",
     "lodash": "^4.17.10",
     "lodash.values": "^4.3.0",
+    "s3": "^4.4.0",
+    "shelljs": "^0.8.2",
     "web3": "0.20.6"
   },
   "devDependencies": {
