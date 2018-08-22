@@ -33,6 +33,7 @@ import { OrderTransactionInfo } from './lib/OrderTransactionInfo';
 import { MARKETProtocolArtifacts } from './MARKETProtocolArtifacts';
 import { OraclizeContractWrapper } from './contract_wrappers/OraclizeContractWrapper';
 import { OraclizeContractMetaData } from './types/ContractMetaData';
+import { ContractABIVerifier } from './utilities/ContractABIVerifier';
 
 /**
  * The `Market` class is the single entry-point into the MARKET.js library.
@@ -114,6 +115,8 @@ export class Market {
     /* tslint:enable */
 
     this.marketContractWrapper = new OraclizeContractWrapper(this._web3, this);
+
+    this._verifyContracts(config);
   }
   // endregion//Constructors
 
@@ -634,6 +637,39 @@ export class Market {
     config.orderLibAddress = artifacts.orderLibArtifact.networks[config.networkId].address;
 
     return config;
+  }
+
+  private _verifyContracts(config: MARKETProtocolConfig) {
+    const artifacts = new MARKETProtocolArtifacts(config.networkId);
+    const verifier = new ContractABIVerifier();
+
+    const verificationResult = verifier.verify([
+      {
+        artifact: artifacts.marketCollateralPoolFactoryArtifact,
+        contract: this.marketCollateralPoolFactory
+      },
+      {
+        artifact: artifacts.marketContractFactoryOraclizeArtifact,
+        contract: this.marketContractFactory
+      },
+      {
+        artifact: artifacts.marketContractRegistryArtifact,
+        contract: this.marketContractRegistry
+      },
+      {
+        artifact: artifacts.marketTokenArtifact,
+        contract: this.mktTokenContract
+      },
+      {
+        artifact: artifacts.orderLibArtifact,
+        contract: this.orderLib
+      }
+    ]);
+
+    const invalidResults = verificationResult.filter(result => !result.isValid);
+    if (invalidResults.length !== 0) {
+      throw new Error(`ABI Verification failed.\n${JSON.stringify(invalidResults)}`);
+    }
   }
   // endregion //Private Methods
 }

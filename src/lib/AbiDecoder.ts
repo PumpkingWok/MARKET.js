@@ -4,10 +4,6 @@ import * as abiDecoder from 'abi-decoder';
 
 import { Artifact, DecodedLogEntry, LogEntry } from '@marketprotocol/types';
 
-import { ContractAbi } from '../types';
-
-import {} from './Utils';
-
 /**
  * Represents Event Arguments gotten from the abi-decoder emails
  *
