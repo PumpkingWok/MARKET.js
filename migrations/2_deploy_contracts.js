@@ -70,10 +70,6 @@ module.exports = function(deployer, network) {
           deployer.deploy(CollateralToken, 'Stable USD', 'USD', 1e9, 18);
           deployer.deploy(CollateralToken, 'Wrapped ETH', 'WETH', 1e9, 18);
 
-          const daysToExpiration = 28;
-          const expirationDate = new Date();
-          expirationDate.setDate(expirationDate.getDate() + daysToExpiration);
-
           // deploy and set up main factory to create MARKET Protocol smart contracts.
           return MarketContractRegistry.deployed().then(function(
             marketContractRegistry
