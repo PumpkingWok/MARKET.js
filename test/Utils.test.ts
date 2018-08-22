@@ -6,7 +6,6 @@ import FakeProvider from 'web3-fake-provider';
 // Types
 import { ECSignature } from '@marketprotocol/types';
 import { Utils } from '../src';
-import { cat } from 'shelljs';
 
 /**
  * Utils
