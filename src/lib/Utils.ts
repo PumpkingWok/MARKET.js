@@ -204,6 +204,24 @@ export const Utils = {
     const hashBuff = ethABI.soliditySHA3(types, values);
     const hashHex = ethUtil.bufferToHex(hashBuff);
     return hashHex;
+  },
+
+  /**
+   * Returns a promise which resolves with the ETH networkId string. The promise will be rejected
+   * if an error occurs.
+   * @method networkId
+   * @return {Promise<string>}
+   */
+  getNetworkId(web3: Web3): Promise<string> {
+    return new Promise((resolve, reject) => {
+      web3.version.getNetwork((error, networkId) => {
+        if (error) {
+          reject(`Unable to connect. Please check your PROVIDER or start truffle.`);
+        } else {
+          resolve(networkId);
+        }
+      });
+    });
   }
 };
 

@@ -78,4 +78,19 @@ describe('Utils library', () => {
     );
     expect(contractName).toEqual('BTC_USDT_BIN_123_PE');
   });
+
+  it('returns a correct network id', async () => {
+    let web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
+    const networkID: string = await Utils.getNetworkId(web3);
+    expect(networkID).toEqual('4447');
+  });
+
+  it('fails to return a network id when not connected to valid provider', async () => {
+    let web3 = new Web3(new Web3.providers.HttpProvider('http://fake:9545'));
+    try {
+      await Utils.getNetworkId(web3);
+    } catch (e) {
+      expect(e).toBe('Unable to connect. Please check your PROVIDER or start truffle.');
+    }
+  });
 });
