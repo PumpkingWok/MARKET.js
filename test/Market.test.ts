@@ -43,10 +43,6 @@ describe('Market class', () => {
     expect(market).toBeInstanceOf(Market);
   });
 
-  it('Is safe Instantiable', () => {
-    expect(Market.safeInit(web3.currentProvider, config)).toBeInstanceOf(Market);
-  });
-
   it('Returns a whitelist', async () => {
     const result = await market.getAddressWhiteListAsync();
     expect(result).toBeDefined();

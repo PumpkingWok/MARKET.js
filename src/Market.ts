@@ -115,6 +115,8 @@ export class Market {
     /* tslint:enable */
 
     this.marketContractWrapper = new OraclizeContractWrapper(this._web3, this);
+
+    this._verifyContracts(config);
   }
   // endregion//Constructors
 
@@ -122,47 +124,6 @@ export class Market {
   // *****************************************************************
   // ****                     Public Methods                      ****
   // *****************************************************************
-
-  /**
-   * Instantiates Market class and verifies the ABI are in sync with the typechain generated classes
-   *  of market contract deployed to the addresses in config.
-   *
-   *
-   */
-  public static safeInit(provider: Provider, config: MARKETProtocolConfig): Market {
-    const market = new Market(provider, config);
-    const artifacts = new MARKETProtocolArtifacts(config.networkId);
-    const verifier = new ContractABIVerifier();
-
-    const verificationResult = verifier.verify([
-      {
-        artifact: artifacts.marketCollateralPoolFactoryArtifact,
-        contract: market.marketCollateralPoolFactory
-      },
-      {
-        artifact: artifacts.marketContractFactoryOraclizeArtifact,
-        contract: market.marketContractFactory
-      },
-      {
-        artifact: artifacts.marketContractRegistryArtifact,
-        contract: market.marketContractRegistry
-      },
-      {
-        artifact: artifacts.marketTokenArtifact,
-        contract: market.mktTokenContract
-      },
-      {
-        artifact: artifacts.orderLibArtifact,
-        contract: market.orderLib
-      }
-    ]);
-    const invalidResults = verificationResult.filter(result => !result.isValid);
-    if (invalidResults.length !== 0) {
-      throw new Error(`ABI Verification failed.\n${JSON.stringify(invalidResults)}`);
-    }
-
-    return market;
-  }
 
   // PROVIDER METHODS
   /**
@@ -676,6 +637,39 @@ export class Market {
     config.orderLibAddress = artifacts.orderLibArtifact.networks[config.networkId].address;
 
     return config;
+  }
+
+  private _verifyContracts(config: MARKETProtocolConfig) {
+    const artifacts = new MARKETProtocolArtifacts(config.networkId);
+    const verifier = new ContractABIVerifier();
+
+    const verificationResult = verifier.verify([
+      {
+        artifact: artifacts.marketCollateralPoolFactoryArtifact,
+        contract: this.marketCollateralPoolFactory
+      },
+      {
+        artifact: artifacts.marketContractFactoryOraclizeArtifact,
+        contract: this.marketContractFactory
+      },
+      {
+        artifact: artifacts.marketContractRegistryArtifact,
+        contract: this.marketContractRegistry
+      },
+      {
+        artifact: artifacts.marketTokenArtifact,
+        contract: this.mktTokenContract
+      },
+      {
+        artifact: artifacts.orderLibArtifact,
+        contract: this.orderLib
+      }
+    ]);
+
+    const invalidResults = verificationResult.filter(result => !result.isValid);
+    if (invalidResults.length !== 0) {
+      throw new Error(`ABI Verification failed.\n${JSON.stringify(invalidResults)}`);
+    }
   }
   // endregion //Private Methods
 }
