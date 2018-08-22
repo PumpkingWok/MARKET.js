@@ -57,7 +57,7 @@ describe('ExpirationWatcher', () => {
         Utils.generatePseudoRandomSalt(),
         false
       );
-      const orderHash = await market.createOrderHashAsync(signedOrder);
+      const orderHash = market.getOrderHash(signedOrder);
       expirationWatcher.addOrder(orderHash, signedOrder.expirationTimestamp.times(1000));
 
       const callbackAsync = (hash: string) => {
@@ -90,7 +90,7 @@ describe('ExpirationWatcher', () => {
         Utils.generatePseudoRandomSalt(),
         false
       );
-      const orderHash = await market.createOrderHashAsync(signedOrder);
+      const orderHash = market.getOrderHash(signedOrder);
       expirationWatcher.addOrder(orderHash, signedOrder.expirationTimestamp.times(1000));
 
       const callbackAsync = (hash: string) => {
@@ -139,8 +139,8 @@ describe('ExpirationWatcher', () => {
         false
       );
 
-      const orderHash1 = await market.createOrderHashAsync(signedOrder1);
-      const orderHash2 = await market.createOrderHashAsync(signedOrder2);
+      const orderHash1 = market.getOrderHash(signedOrder1);
+      const orderHash2 = market.getOrderHash(signedOrder2);
 
       expirationWatcher.addOrder(orderHash2, signedOrder2.expirationTimestamp.times(1000));
       expirationWatcher.addOrder(orderHash1, signedOrder1.expirationTimestamp.times(1000));

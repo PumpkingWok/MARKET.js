@@ -28,6 +28,7 @@ import {
 import {
   createOrderHashAsync,
   createSignedOrderAsync,
+  getOrderHash,
   isValidSignatureAsync,
   signOrderHashAsync
 } from './lib/Order';
@@ -464,6 +465,14 @@ export class Market {
    */
   public async createOrderHashAsync(order: Order | SignedOrder): Promise<string> {
     return createOrderHashAsync(this.orderLib, order);
+  }
+
+  /**
+   * Computes the orderHash for a supplied order. Similar to createOrderHashAsync() but is synchronous.
+   * @param {Order | SignedOrder} order  An object that conforms to the Order or SignedOrder interface definition
+   */
+  public getOrderHash(order: Order | SignedOrder): string {
+    return getOrderHash(order);
   }
 
   /**

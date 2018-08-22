@@ -115,7 +115,7 @@ describe('Order filled/cancelled store', async () => {
       gas: 400000
     });
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
     const store = new OrderFilledCancelledLazyStore(market.marketContractWrapper);
 
     const qty = await store.getQtyFilledOrCancelledAsync(deployedMarketContract.address, orderHash);
@@ -130,7 +130,7 @@ describe('Order filled/cancelled store', async () => {
       gas: 400000
     });
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
     const store = new OrderFilledCancelledLazyStore(market.marketContractWrapper);
 
     await store.getQtyFilledOrCancelledAsync(deployedMarketContract.address, orderHash);
@@ -152,7 +152,7 @@ describe('Order filled/cancelled store', async () => {
       gas: 400000
     });
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
     const store = new OrderFilledCancelledLazyStore(market.marketContractWrapper);
 
     await store.getQtyFilledOrCancelledAsync(deployedMarketContract.address, orderHash);
@@ -181,7 +181,7 @@ describe('Order filled/cancelled store', async () => {
       gas: 400000
     });
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
     const store = new OrderFilledCancelledLazyStore(market.marketContractWrapper);
 
     await store.getQtyFilledOrCancelledAsync(deployedMarketContract.address, orderHash);

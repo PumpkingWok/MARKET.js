@@ -92,7 +92,7 @@ describe('Remaining Fillable Calculator', async () => {
       false
     );
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     const calc = new RemainingFillableCalculator(
       market,
@@ -199,7 +199,7 @@ describe('Remaining Fillable Calculator', async () => {
       false
     );
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     const calc = new RemainingFillableCalculator(
       market,
@@ -243,7 +243,7 @@ describe('Remaining Fillable Calculator', async () => {
       false
     );
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     const calc = new RemainingFillableCalculator(
       market,
@@ -289,7 +289,7 @@ describe('Remaining Fillable Calculator', async () => {
       false
     );
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     const calc = new RemainingFillableCalculator(
       market,

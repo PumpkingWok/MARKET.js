@@ -20,7 +20,7 @@ import { assert } from '../assert';
 
 import { Utils } from '../lib/Utils';
 import { constants } from '../constants';
-import { createOrderHashAsync, isValidSignatureAsync } from '../lib/Order';
+import { getOrderHash, isValidSignatureAsync } from '../lib/Order';
 import { OrderTransactionInfo } from '../lib/OrderTransactionInfo';
 import { ContractSet } from './ContractSet';
 import { Market } from '../Market';
@@ -143,7 +143,7 @@ export class ContractWrapper {
       return Promise.reject(new Error(MarketError.BuySellMismatch));
     }
 
-    const orderHash = await createOrderHashAsync(orderLib, signedOrder);
+    const orderHash = getOrderHash(signedOrder);
 
     const validSignature = await isValidSignatureAsync(orderLib, signedOrder, orderHash);
 

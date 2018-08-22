@@ -441,7 +441,7 @@ describe('Collateral', () => {
         false
       );
 
-      const orderHash = await market.createOrderHashAsync(signedOrder);
+      const orderHash = market.getOrderHash(signedOrder);
       expect(await market.isValidSignatureAsync(signedOrder, orderHash)).toBe(true);
 
       const orderTxInfo = await market.tradeOrderAsync(signedOrder, new BigNumber(2), {
@@ -540,7 +540,7 @@ describe('Collateral', () => {
           false
         );
 
-        orderHash = await market.createOrderHashAsync(signedOrder);
+        orderHash = market.getOrderHash(signedOrder);
         expect(await market.isValidSignatureAsync(signedOrder, orderHash.toString())).toBe(true);
 
         const orderTxInfo = await market.tradeOrderAsync(

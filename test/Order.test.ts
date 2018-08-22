@@ -106,7 +106,7 @@ describe('Order', () => {
       false
     );
 
-    const orderHash: string | BigNumber = await market.createOrderHashAsync(signedOrder);
+    const orderHash: string | BigNumber = market.getOrderHash(signedOrder);
 
     expect(await market.isValidSignatureAsync(signedOrder, orderHash.toString())).toBe(true);
 
@@ -130,7 +130,7 @@ describe('Order', () => {
       ecSignature: signedOrder.ecSignature
     };
 
-    const orderHashFake: string = await market.createOrderHashAsync(signedOrderFake);
+    const orderHashFake: string = market.getOrderHash(signedOrderFake);
 
     expect(await market.isValidSignatureAsync(signedOrderFake, orderHashFake)).toBe(false);
 
@@ -208,7 +208,7 @@ describe('Order', () => {
       false
     );
 
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     expect(await market.isValidSignatureAsync(signedOrder, orderHash)).toBe(true);
 
@@ -388,7 +388,7 @@ describe('Order', () => {
       Utils.generatePseudoRandomSalt(),
       false
     );
-    const orderHash = await market.createOrderHashAsync(signedOrder);
+    const orderHash = market.getOrderHash(signedOrder);
 
     expect(
       await market.getQtyFilledOrCancelledFromOrderAsync(contractAddress, orderHash.toString())

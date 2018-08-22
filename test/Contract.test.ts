@@ -116,8 +116,8 @@ describe('Contract Fills', () => {
       false
     );
 
-    orderHash = await market.createOrderHashAsync(signedOrder);
-    orderHash2 = await market.createOrderHashAsync(signedOrder2);
+    orderHash = market.getOrderHash(signedOrder);
+    orderHash2 = market.getOrderHash(signedOrder2);
 
     expect(
       await market.getQtyFilledOrCancelledFromOrderAsync(contractAddress, orderHash.toString())

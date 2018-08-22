@@ -10,12 +10,7 @@ import { MarketError, MARKETProtocolConfig, OrderStateWatcherConfig } from '../s
 import { constants } from '../src/constants';
 import { createEVMSnapshot, getContractAddress, restoreEVMSnapshot } from './utils';
 
-import {
-  createOrderHashAsync,
-  createSignedOrderAsync,
-  isValidSignatureAsync,
-  signOrderHashAsync
-} from '../src/lib/Order';
+import { createSignedOrderAsync } from '../src/lib/Order';
 
 interface CreateOrderParams {
   makerAddress?: string;
