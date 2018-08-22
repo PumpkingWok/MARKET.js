@@ -1,8 +1,7 @@
-import BigNumber from 'bignumber.js';
 import Web3 from 'web3';
 import * as _ from 'lodash';
 
-import { DecodedLogEntry, SignedOrder } from '@marketprotocol/types';
+import { SignedOrder } from '@marketprotocol/types';
 
 import {
   BlockParamLiteral,
@@ -15,7 +14,7 @@ import {
 import { assert } from '../assert';
 import { ExpirationWatcher } from './ExpirationWatcher';
 import { EventWatcher } from './EventWatcher';
-import { Market, Utils } from '..';
+import { Market } from '..';
 import {
   BalanceAndAllowanceLazyStore,
   OrderCollateralPoolAndTokenLazyStore,
@@ -23,6 +22,7 @@ import {
 } from '../stores';
 import { IntervalUtils } from '../lib/Utils';
 import { AbiDecoder } from '../lib/AbiDecoder';
+import { getOrderHash } from '../lib/Order';
 import {
   ApprovalContractEventArgs,
   CollateralPoolEvents,
@@ -202,7 +202,7 @@ export class OrderStateWatcher {
    */
   public async addOrder(signedOrder: SignedOrder): Promise<void> {
     assert.isSchemaValid('signedOrder', signedOrder, schemas.SignedOrderSchema);
-    const orderHash = Utils.getOrderHash(signedOrder);
+    const orderHash = getOrderHash(signedOrder);
     assert.isValidSignature(orderHash, signedOrder.ecSignature, signedOrder.maker);
 
     this._orderByOrderHash[orderHash] = signedOrder;

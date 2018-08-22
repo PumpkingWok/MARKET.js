@@ -3,7 +3,6 @@ import { join } from 'path';
 import DoneCallback = jest.DoneCallback;
 
 import {
-  BlockParamLiteral,
   MarketError,
   OrderState,
   OrderStateInvalid,
@@ -16,6 +15,7 @@ import { OrderStateWatcher } from '../src/order_watcher/OrderStateWatcher';
 import { Helper } from './helper';
 import { Utils } from '../src';
 import { AbiDecoder } from '../src/lib/AbiDecoder';
+import { getOrderHash } from '../src/lib/Order';
 import { Artifact, SignedOrder } from '@marketprotocol/types';
 
 describe('OrderStateWatcher', () => {
@@ -91,7 +91,7 @@ describe('OrderStateWatcher', () => {
   describe('removeOrder', () => {
     it('should remove existing order without throwing error', async () => {
       signedOrder = await helper.createOrderAsync();
-      const orderHash = Utils.getOrderHash(signedOrder);
+      const orderHash = getOrderHash(signedOrder);
 
       await orderStateWatcher.addOrder(signedOrder);
 
@@ -106,7 +106,7 @@ describe('OrderStateWatcher', () => {
   describe('subscription behaviour', async () => {
     afterEach(() => {
       orderStateWatcher.unsubscribe();
-      const orderHash = Utils.getOrderHash(signedOrder);
+      const orderHash = getOrderHash(signedOrder);
       orderStateWatcher.removeOrder(orderHash);
     });
 
@@ -190,7 +190,7 @@ describe('OrderStateWatcher', () => {
         const orderQty = 10;
         const fillQty = 2;
         signedOrder = await helper.createOrderAsync();
-        const orderHash = Utils.getOrderHash(signedOrder);
+        const orderHash = getOrderHash(signedOrder);
         await orderStateWatcher.addOrder(signedOrder);
         const callback = reportNodeCallbackErrors(done)((orderState: OrderState) => {
           expect(orderState.isValid).toBeTruthy();
@@ -247,7 +247,7 @@ describe('OrderStateWatcher', () => {
         await helper.fundMKT({ address: helper.taker, approvalAddress: feeRecipient });
 
         signedOrder = await helper.createOrderAsync({ fees, feeRecipient });
-        const orderHash = Utils.getOrderHash(signedOrder);
+        const orderHash = getOrderHash(signedOrder);
         await orderStateWatcher.addOrder(signedOrder);
 
         const callback = reportNodeCallbackErrors(done)((orderState: OrderState) => {
@@ -271,7 +271,7 @@ describe('OrderStateWatcher', () => {
 
         const expirationTimeStamp = Math.floor(Date.now() / 1000) + 5; // expires 5 seconds from now
         signedOrder = await helper.createOrderAsync({ expirationTimeStamp });
-        const orderHash = Utils.getOrderHash(signedOrder);
+        const orderHash = getOrderHash(signedOrder);
         await orderStateWatcher.addOrder(signedOrder);
 
         const callback = reportNodeCallbackErrors(done)((orderState: OrderState) => {

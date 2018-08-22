@@ -13,7 +13,7 @@ import {
   OrderStateInvalid,
   OrderStateValid
 } from '../types';
-import { Utils } from '../lib/Utils';
+import { getOrderHash } from '../lib/Order';
 import { RemainingFillableCalculator } from '../order_watcher/RemainingFillableCalc';
 import { Market } from '..';
 
@@ -85,7 +85,7 @@ export class OrderStateUtils {
   // ****                     Public Methods                      ****
   // *****************************************************************
   public async getOrderStateAsync(signedOrder: SignedOrder): Promise<OrderState> {
-    const orderHash = Utils.getOrderHash(signedOrder);
+    const orderHash = getOrderHash(signedOrder);
     try {
       const orderRelevantState = await this.getOrderRelevantStateAsync(signedOrder);
       OrderStateUtils._validateIfOrderIsValid(signedOrder, orderRelevantState);
@@ -122,7 +122,7 @@ export class OrderStateUtils {
       signedOrder.price
     );
 
-    const orderHash = Utils.getOrderHash(signedOrder);
+    const orderHash = getOrderHash(signedOrder);
 
     const makerCollateralBalance = await this._balanceAndAllowanceLazyStore.getCollateralBalanceAsync(
       mtkContractAddress,

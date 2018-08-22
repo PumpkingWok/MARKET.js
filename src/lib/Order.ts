@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import Web3 from 'web3';
+import * as _ from 'lodash';
 
 // Types
 import { Provider } from '@0xproject/types';
@@ -8,7 +9,10 @@ import { ECSignature, Order, OrderLib, SignedOrder } from '@marketprotocol/types
 import { Utils } from './Utils';
 import { assert } from '../assert';
 import { schemas } from '../schemas';
+import { SolidityTypes } from '../types';
 
+const BN = require('bn.js');
+const ethABI = require('ethereumjs-abi');
 let ethUtil = require('ethereumjs-util');
 
 /**
@@ -162,4 +166,41 @@ export async function signOrderHashAsync(
   }
 
   return Utils.signMessage(web3, signerAddress, msgHashHex);
+}
+
+/**
+ * Generates the order hash for an order, synchronously.
+ *
+ * @param {Order | SignedOrder} order
+ * @return {string}
+ */
+export function getOrderHash(order: Order | SignedOrder): string {
+  const orderParts = [
+    { value: order.contractAddress, type: SolidityTypes.Address },
+    { value: order.maker, type: SolidityTypes.Address },
+    { value: order.taker, type: SolidityTypes.Address },
+    { value: order.feeRecipient, type: SolidityTypes.Address },
+    { value: bigNumberToBN(order.makerFee), type: SolidityTypes.Uint },
+    { value: bigNumberToBN(order.takerFee), type: SolidityTypes.Uint },
+    { value: bigNumberToBN(order.price), type: SolidityTypes.Uint },
+    { value: bigNumberToBN(order.expirationTimestamp), type: SolidityTypes.Uint },
+    { value: bigNumberToBN(order.salt), type: SolidityTypes.Uint },
+    { value: bigNumberToBN(order.orderQty), type: SolidityTypes.Int }
+  ];
+
+  const types = _.map(orderParts, o => o.type);
+  const values = _.map(orderParts, o => o.value);
+  const hashBuff = ethABI.soliditySHA3(types, values);
+  const hashHex = ethUtil.bufferToHex(hashBuff);
+  return hashHex;
+}
+
+/**
+ * Converts BigNumber instance to BN
+ * The only reason we convert to BN is to remain compatible with `ethABI. soliditySHA3` that
+ * expects values of Solidity type `uint` to be passed as type `BN`.
+ * We do not use BN anywhere else in the codebase.
+ */
+function bigNumberToBN(value: BigNumber) {
+  return new BN(value.toString(10), 10);
 }
