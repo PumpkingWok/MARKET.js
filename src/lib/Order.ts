@@ -7,6 +7,7 @@ import { ECSignature, Order, OrderLib, SignedOrder } from '@marketprotocol/types
 
 import { Utils } from './Utils';
 import { assert } from '../assert';
+import { schemas } from '../schemas';
 
 let ethUtil = require('ethereumjs-util');
 
@@ -21,7 +22,7 @@ export async function createOrderHashAsync(
   order: Order | SignedOrder
 ): Promise<string> {
   // below assert statement fails due to issues with BigNumber vs Number.
-  // assert.isSchemaValid('Order', order, schemas.OrderSchema);
+  assert.isSchemaValid('Order', order, schemas.OrderSchema);
 
   return orderLib
     .createOrderHash(
@@ -119,6 +120,8 @@ export async function isValidSignatureAsync(
   signedOrder: SignedOrder,
   orderHash: string
 ): Promise<boolean> {
+  assert.isSchemaValid('signedOrder', signedOrder, schemas.SignedOrderSchema);
+
   return orderLib.isValidSignature(
     signedOrder.maker,
     orderHash,

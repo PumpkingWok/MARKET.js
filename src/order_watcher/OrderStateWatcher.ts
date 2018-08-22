@@ -37,6 +37,7 @@ import {
   UserUpdatedLockedBalanceEventArgs
 } from '../types/ContractEvents';
 import { OrderStateUtils } from '../utilities/OrderStateUtils';
+import { schemas } from '../schemas';
 
 interface DependentOrderHashes {
   [makerAddress: string]: {
@@ -200,6 +201,7 @@ export class OrderStateWatcher {
    * @param {SignedOrder} signedOrder
    */
   public async addOrder(signedOrder: SignedOrder): Promise<void> {
+    assert.isSchemaValid('signedOrder', signedOrder, schemas.SignedOrderSchema);
     const orderHash = Utils.getOrderHash(signedOrder);
     assert.isValidSignature(orderHash, signedOrder.ecSignature, signedOrder.maker);
 

@@ -15,6 +15,7 @@ import {
 
 import { Transaction } from '@0xproject/types';
 import { CollateralEvent, MarketError, OrderFilledEvent } from '../types';
+import { schemas } from '../schemas';
 import { assert } from '../assert';
 
 import { Utils } from '../lib/Utils';
@@ -112,7 +113,7 @@ export class ContractWrapper {
     fillQty: BigNumber,
     txParams: ITxParams = {}
   ): Promise<OrderTransactionInfo> {
-    // assert.isSchemaValid('SignedOrder', signedOrder, schemas.SignedOrderSchema);
+    assert.isSchemaValid('signedOrder', signedOrder, schemas.SignedOrderSchema);
 
     const contractSetWrapper: ContractSet = await this._getContractSetByMarketContractAddressAsync(
       signedOrder.contractAddress

@@ -12,6 +12,8 @@ import { Artifact, ECSignature, Order, SignedOrder } from '@marketprotocol/types
 import { constants } from '../constants';
 const fs = require('fs');
 import { ParsedContractName, SolidityTypes } from '../types';
+import { assert } from '../assert';
+import { schemas } from '../schemas';
 
 export const Utils = {
   /**
@@ -182,6 +184,8 @@ export const Utils = {
    * @return {string}
    */
   getOrderHash(order: Order | SignedOrder): string {
+    assert.isSchemaValid('order', order, schemas.OrderSchema);
+
     const orderParts = [
       { value: order.contractAddress, type: SolidityTypes.Address },
       { value: order.maker, type: SolidityTypes.Address },
