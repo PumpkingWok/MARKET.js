@@ -39,7 +39,7 @@ export const assert = {
     }
     const validationResult = schemaValidator.validate(value, schema);
     const hasValidationErrors = validationResult.errors.length > 0;
-    const msg = `Expected ${variableName} to confirm to schema ${schema.id}
+    const msg = `Expected ${variableName} to conform to schema ${schema.id}
       Encountered: ${JSON.stringify(value, null, '\t')}
       Validation errors: ${validationResult.errors.join(', ')}`;
     this.assert(!hasValidationErrors, msg);

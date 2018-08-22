@@ -212,7 +212,7 @@ describe('Order Validation', async () => {
       Utils.generatePseudoRandomSalt(),
       false
     );
-    signedOrder.ecSignature.s = '0x';
+    signedOrder.ecSignature.s = signedOrder.ecSignature.r; // corrupt signature
 
     expect.assertions(1);
     try {

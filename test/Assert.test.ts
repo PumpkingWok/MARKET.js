@@ -4,6 +4,7 @@ import FakeProvider from 'web3-fake-provider';
 import Web3 from 'web3';
 
 import { assert } from '../src/assert';
+import { schemas } from '../src/schemas';
 
 describe('Assert library', () => {
   const variableName = 'variable';
@@ -164,6 +165,29 @@ describe('Assert library', () => {
       await expect(
         assert.isSenderAddressAsync(variableName, senderAddress, new Web3(mockProvider))
       ).rejects.toThrow();
+    });
+  });
+
+  describe('isSchemaValid', () => {
+    it.each([
+      ['validETHAddress', '0xc1912fee45d61c87cc5ea59dae31190fffff232d', schemas.AddressSchema],
+      ['validNumber', '1234', schemas.NumberSchema],
+      ['validFloatNumber', '123.45', schemas.NumberSchema],
+      ['validNumberWithExponent', '1.23e-5', schemas.NumberSchema],
+      ['validNumberWithSign', '-25', schemas.NumberSchema],
+      ['validNumberWithSignAndExponent', '-45.34e+20', schemas.NumberSchema]
+    ])('should not throw for %s', (name, value, schema) => {
+      const validETHAddress = '0xc1912fee45d61c87cc5ea59dae31190fffff232d';
+      expect(() => {
+        assert.isSchemaValid(name, value, schema);
+      }).not.toThrow();
+    });
+
+    it('should throw for invalid schema', () => {
+      const invalidETHAddress = '0x';
+      expect(() => {
+        assert.isSchemaValid('invalidETHAddress', invalidETHAddress, schemas.AddressSchema);
+      }).toThrow();
     });
   });
 });

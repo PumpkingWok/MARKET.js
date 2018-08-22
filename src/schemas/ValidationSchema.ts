@@ -27,6 +27,6 @@ export const ECSignatureSchema = {
 
 export const NumberSchema = {
   id: '/Number',
-  type: 'number',
-  pattern: '^\\d+(\\.\\d+)?$'
+  type: 'string',
+  pattern: '([-+]?\\d*\\.?\\d+)(?:[eE]([-+]?\\d+))?$'
 };
