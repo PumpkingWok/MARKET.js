@@ -12,6 +12,7 @@ export enum MarketError {
   SubscriptionNotFound = 'SUBSCRIPTION_NOT_FOUND',
   SubscriptionAlreadyPresent = 'SUBSCRIPTION_ALREADY_PRESENT',
   InvalidTaker = 'INVALID_TAKER',
+  InvalidWashTrade = 'INVALID_WASH_TRADE',
   OrderExpired = 'ORDER_EXPIRED',
   OrderDead = 'ORDER_DEAD',
   UnknownOrderError = 'UNKNOWN_ORDER_ERROR',
