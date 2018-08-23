@@ -765,8 +765,6 @@ export class ContractWrapper {
     assert.isETHAddressHex('ownerAddress', ownerAddress);
     assert.isETHAddressHex('tokenAddress', tokenAddress);
     assert.isETHAddressHex('spenderAddress', spenderAddress);
-    await assert.isSenderAddressAsync('ownerAddress', ownerAddress, this._web3);
-
     const tokenContract = await this.getERC20TokenContractAsync(tokenAddress);
     return tokenContract.allowance(ownerAddress, spenderAddress);
   }
