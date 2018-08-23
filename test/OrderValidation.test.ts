@@ -249,11 +249,43 @@ describe('Order Validation', async () => {
     expect.assertions(1);
     try {
       await market.tradeOrderAsync(signedOrder, new BigNumber(2), {
-        from: maker,
+        from: web3.eth.accounts[5],
         gas: 400000
       });
     } catch (e) {
       expect(e).toEqual(new Error(MarketError.InvalidTaker));
+    }
+  });
+
+  it('Checks taker cannot be same as maker', async () => {
+    fees = new BigNumber(0);
+    await collateralToken.transferTx(taker, initialCredit).send({ from: deploymentAddress });
+    await collateralToken.approveTx(collateralPoolAddress, initialCredit).send({ from: taker });
+    await market.depositCollateralAsync(contractAddress, initialCredit, {
+      from: taker
+    });
+    const signedOrder: SignedOrder = await market.createSignedOrderAsync(
+      contractAddress,
+      new BigNumber(Math.floor(Date.now() / 1000) + 60 * 60),
+      constants.NULL_ADDRESS,
+      maker,
+      fees,
+      constants.NULL_ADDRESS,
+      fees,
+      orderQty,
+      price,
+      Utils.generatePseudoRandomSalt(),
+      false
+    );
+
+    expect.assertions(1);
+    try {
+      await market.tradeOrderAsync(signedOrder, new BigNumber(2), {
+        from: maker,
+        gas: 400000
+      });
+    } catch (e) {
+      expect(e).toEqual(new Error(MarketError.InvalidWashTrade));
     }
   });
 

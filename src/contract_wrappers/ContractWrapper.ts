@@ -127,7 +127,17 @@ export class ContractWrapper {
     const maker = signedOrder.maker;
     const taker = txParams.from ? txParams.from : constants.NULL_ADDRESS;
 
-    if (signedOrder.taker !== constants.NULL_ADDRESS && signedOrder.taker !== taker) {
+    const takerNormalizedAddress = taker.toLowerCase();
+    const makerNormalizedAddress = maker.toLowerCase();
+
+    if (takerNormalizedAddress === makerNormalizedAddress) {
+      return Promise.reject(new Error(MarketError.InvalidWashTrade));
+    }
+
+    if (
+      signedOrder.taker !== constants.NULL_ADDRESS &&
+      signedOrder.taker.toLowerCase() !== takerNormalizedAddress
+    ) {
       return Promise.reject(new Error(MarketError.InvalidTaker));
     }
 
